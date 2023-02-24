@@ -20,10 +20,6 @@
 				<i class="layui-icon layui-icon-add-1"></i>
 				新增
 			</button>
-			<button class="pear-btn pear-btn-danger pear-btn-md" lay-event="change">
-				<i class="layui-icon layui-icon-delete"></i>
-				转交
-			</button>
 			<button class="pear-btn pear-btn-danger pear-btn-md" lay-event="highSearch">
 				<i class="layui-icon layui-icon-search"></i>
 				高级搜索
@@ -32,15 +28,29 @@
 				<i class="layui-icon layui-icon-export"></i>
 				导出
 			</button>
-			<div class="layui-form-item layui-inline" style="float:right ;" >
-				<div class="layui-input-inline" style="display: flex;">
-					<input type="text" name="name" placeholder="" class="layui-input">
-					<button class="pear-btn pear-btn-md pear-btn-primary" lay-submit lay-filter="role-query">
-						<i class="layui-icon layui-icon-search"></i>
-						查询
-					</button>
+			<form class="layui-form" style="float: right;"id="btn">
+				<div class="layui-form-item" style="display: flex;">
+				  <div class="layui-input-block">
+					<input
+					  type="text"
+					  name=""
+					  placeholder="请输入"
+					  autocomplete="off"
+					  class="layui-input"
+					  id="searchIpt"
+					/>
+				  </div>
+				  <button
+					type="button"
+					class="pear-btn pear-btn-md pear-btn-primary"
+					data-type="reload"
+					lay-filter="appoint-management-query"
+				  >
+					<i class="layui-icon layui-icon-search"></i>
+					查询
+				  </button>
 				</div>
-			</div>
+			  </form>
 		</script>
 
 		<script type="text/html" id="role-bar">
@@ -60,7 +70,7 @@
 		        let cols = [
 		            [
 		                {type:'checkbox'},
-                        {title: '类型', field: 'id', align:'center', width:40},
+                        {title: 'id', field: 'id', align:'center', width:40},
 		                {title: '患者名称', field: 'user_name', align:'center', width:40},
 		                {title: '性别', field: 'user_sex', align:'center'},
 						{title: '年龄', field: 'user_age', align:'center'},
@@ -103,6 +113,29 @@
 				},
 				id: 'test'
 			});
+				//搜素框
+			//以下是搜索框进行监测
+			var active = {
+				reload: function () {
+					var demoReload = $('#searchIpt');
+					console.log(demoReload.val());	//得到搜索框里已输入的数据
+					//执行重载
+					table.reload('test', {
+						page: {
+							curr: 1 //重新从第 1 页开始
+						}
+						, where: {
+							user_name: demoReload.val()		//在表格中进行搜索
+						}
+					});
+				}
+			};
+
+			$('#btn .pear-btn').on('click', function () {
+				var type = $(this).data('type');
+				active[type] ? active[type].call(this) : '';
+			});
+
 			table.on("tool(village_table)", function (obj) {
 				if (obj.event === "remove") {
 					console.log("remove");
@@ -166,7 +199,7 @@
 		                title: '新增',
 		                shade: 0.1,
                         maxmin: true,
-		                area: ['1000px', '800px'],
+		                area: ['600px', '400px'],
 		                content: MODULE_PATH + 'patient-management-add.html'
 		            });
 		        }
@@ -187,9 +220,25 @@
 		                shade: 0.1,
                         maxmin: true,
 		                area: ['600px', '400px'],
-		                content: MODULE_PATH + 'patient-management-highSearch.html'
+		                content: MODULE_PATH + 'patient-management-highSearch.html',
+						cancel: function () {
+							table.reload('test', {
+								page: {
+									curr: 1 //重新从第 1 页开始
+								}
+								, where: {
+									id:localStorage.getItem("id"),
+									id_card:localStorage.getItem("id_card",data.field["id_card"])
+									//,phone:localStorage.setItem("phone",data.field["phone"])
+									//,identity:localStorage.setItem("identity",data.field["identity"])
+									//,user_name:localStorage.setItem("user_name",data.field["user_name"])
+									//,status:localStorage.setItem("status",data.field["status"])	//在表格中进行搜索
+								}
+							});
+						}
 		            });
 				}
+				
 
 		        window.edit = function(obj){
 		            layer.open({
@@ -197,7 +246,13 @@
 		                title: '修改患者',
 		                shade: 0.1,
 		                area: ['800px', '500px'],
+						content: MODULE_PATH +'patient-management-edit.html',
                         content: MODULE_PATH +'patient-management-edit.html?id='+obj.data.id
+						+ "&user_name=" + obj.data.user_name + "&status=" + obj.data.status
+					+ "&user_sex=" + obj.data.user_sex + "&user_age=" + obj.data.user_age +
+					"&phone=" + obj.data.phone + "&address=" + obj.data.address
+					+ "&identity=" + obj.data.identity + "&create_time=" + obj.data.create_time+
+					"&day="+obj.data.day,
 		            });
 		        }
 
@@ -214,7 +269,7 @@
                             type:'post',
                             success:function(result){
                                 layer.close(loading);
-                                if(result.code==0){
+                                if(result.code==200){
                                     layer.msg(result.msg,{icon:1,time:1000},function(){
                                         obj.del();//前端的假删除
                                     });

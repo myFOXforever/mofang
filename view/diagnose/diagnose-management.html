@@ -46,15 +46,29 @@
 				<i class="layui-icon layui-icon-delete"></i>
 				已取消
 			</button>
-			<div class="layui-form-item layui-inline" style="float:right ;" >
-				<div class="layui-input-inline" style="display: flex;">
-					<input type="text" name="name" placeholder="" class="layui-input">
-					<button class="pear-btn pear-btn-md pear-btn-primary" lay-submit lay-filter="role-query">
-						<i class="layui-icon layui-icon-search"></i>
-						查询
-					</button>
+			<form class="layui-form" style="float: right;"id="btn">
+				<div class="layui-form-item" style="display: flex;">
+				  <div class="layui-input-block">
+					<input
+					  type="text"
+					  name=""
+					  placeholder="请输入"
+					  autocomplete="off"
+					  class="layui-input"
+					  id="searchIpt"
+					/>
+				  </div>
+				  <button
+					type="button"
+					class="pear-btn pear-btn-md pear-btn-primary"
+					data-type="reload"
+					lay-filter="appoint-management-query"
+				  >
+					<i class="layui-icon layui-icon-search"></i>
+					查询
+				  </button>
 				</div>
-			</div>
+			  </form>
 		</script>
 
 		<script type="text/html" id="role-bar">
@@ -79,39 +93,68 @@
 
 		        let cols = [
 		            [
-					{title: '类型', field: 'id', align:'center', width:100},
-					{title: '门诊编号', field: 'name', align:'center'},
-					{title: '标题', field: 'address', align:'center'},
-					{title: '患者', field: 'address', align:'center'},
-					{title: '会诊科室', field: 'address', align:'center'},
-					{title: '住院床号', field: 'address', align:'center'},
-					{title: '负责人', field: 'address', align:'center'},
-					{title: '金额', field: 'totalHouseholds', align:'center'},
-					{title: '时间', field: 'totalHouseholds', align:'center'},
-					{title: '药品', field: 'totalHouseholds', align:'center'},
-					{title: '付款', field: 'tenementName', align:'center'},
-					{title: '状态', field: 'created', align:'center',templet:function (r){
-							return !!r.created?layui.util.toDateString(r.created, 'yyyy-MM-dd HH:mm:ss'):"";
-						}},
+					{title: '类型', field: 'type', align:'center', width:100},
+					//{title: '门诊编号', field: 'name', align:'center'},
+					{title: '标题', field: 'title', align:'center'},
+					{title: '患者', field: 'userName', align:'center'},
+					{title: '会诊科室', field: 'department', align:'center'},
+					//{title: '住院床号', field: 'address', align:'center'},
+					{title: '负责人', field: 'pic', align:'center'},
+					{title: '金额', field: 'price', align:'center'},
+					{title: '时间', field: 'createTime', align:'center'},
+					//{title: '药品', field: 'totalHouseholds', align:'center'},
+					//{title: '付款', field: 'tenementName', align:'center'},
 					{title: '操作', toolbar: '#role-bar', align:'center', width:195}
 				]
 		        ]
 
 		        table.render({
 		            elem: '#village-table',
-		            url: 'http://localhost:8080/sunshine/village/list',
+		            url: 'http://8.130.51.18:8080/diagnosis/list?&name=test&status=0',
 		            page: true ,
 		            cols: cols ,
 		            skin: 'line',
 		            toolbar: '#role-toolbar',
-					headers: {
-						token: localStorage.getItem("token")
-					},
-		            defaultToolbar: [{
-		                layEvent: 'refresh',
-		                icon: 'layui-icon-refresh',
-		            }, 'filter', 'print', 'exports']
-		        });
+					totalRow: true,
+				//数据表格携带token
+				//headers: {
+				//	token: localStorage.getItem("token")
+				//},
+				response: {
+					statusName: "code", //规定数据状态的字段名称，默认：code
+					statusCode: 200, //规定成功的状态码，默认：0
+					msgName: "msg", //规定状态信息的字段名称，默认：msg
+					//countName: "count", //规定数据总数的字段名称，默认：count
+					dataName: "data", //规定数据列表的字段名称，默认：data
+				},
+				request: {
+					pageName: 'cur', //页码的参数名称，默认：page
+					limitName: 'size' //每页数据量的参数名，默认：limit
+				},
+				id: 'test'
+			});
+				//搜素框
+			//以下是搜索框进行监测
+			var active = {
+				reload: function () {
+					var demoReload = $('#searchIpt');
+					console.log(demoReload.val());	//得到搜索框里已输入的数据
+					//执行重载
+					table.reload('test', {
+						page: {
+							curr: 1 //重新从第 1 页开始
+						}
+						, where: {
+							userName: demoReload.val()		//在表格中进行搜索
+						}
+					});
+				}
+			};
+
+			$('#btn .pear-btn').on('click', function () {
+				var type = $(this).data('type');
+				active[type] ? active[type].call(this) : '';
+			});
 
 		        table.on('tool(village-table)', function(obj){
 		            if(obj.event === 'remove'){
@@ -179,7 +222,12 @@
 		                title: '修改',
 		                shade: 0.1,
 		                area: ['800px', '500px'],
-                        content: MODULE_PATH +'edit.html?id='+obj.data.id
+                        content: MODULE_PATH +'diagnose-management-edit.html?id='+obj.data.id
+						+ "&title=" + obj.data.title + "&status=" + obj.data.status
+					+ "&price=" + obj.data.price + "&department=" + obj.data.department +
+					"&user_name=" + obj.data.user_name + "&bed_number=" + obj.data.bed_number
+					+ "&pic=" + obj.data.pic + "&drug=" + obj.data.drug,
+			
 		            });
 		        }
 
@@ -188,14 +236,14 @@
 		                layer.close(index);
 		                let loading = layer.load();
                         $.ajax({
-                            url:'http://localhost:8080/sunshine/village/delete',
+                            url:'http://8.130.51.18:8080/diagnosis/delete',
                             data:{
                                 "id":obj.data['id'],
                             },
                             type:'get',
                             success:function(result){
                                 layer.close(loading);
-                                if(result.code==0){
+                                if(result.code==200){
                                     layer.msg(result.msg,{icon:1,time:1000},function(){
                                         obj.del();
                                     });
