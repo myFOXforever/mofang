@@ -62,24 +62,58 @@
 					{ title: '跟进日期', field: 'image', align: 'center', templet: '<div><img  src="{{ d.image }}"></div>' },
 					{ title: '下次跟进', field: 'image', align: 'center', templet: '<div><img  src="{{ d.image }}"></div>' },
 					{ title: '创建时间', field: 'image', align: 'center' },
-					{ title: '状态', field: 'image', align: 'center' },
+					{ title: '状态', field: 'status', align: 'center' },
 					{ title: '操作', toolbar: '#role-bar', align: 'center', width: 195 }
 				]
 			]
 
 			table.render({
 				elem: '#role-table',
-				url: 'http://www.j236.com/admin/banner/list',
+				url: 'http://8.130.51.18:8080/supplierMore/page',
 				page: true,
 				cols: cols,
 				skin: 'line',
 				toolbar: '#role-toolbar',
-				defaultToolbar: [{
-					layEvent: 'refresh',
-					icon: 'layui-icon-refresh',
-				}, 'filter', 'print', 'exports']
+				totalRow: true,
+				//数据表格携带token
+				//headers: {
+				//	token: localStorage.getItem("token")
+				//},
+				response: {
+					statusName: "code", //规定数据状态的字段名称，默认：code
+					statusCode: 200, //规定成功的状态码，默认：0
+					msgName: "msg", //规定状态信息的字段名称，默认：msg
+					//countName: "count", //规定数据总数的字段名称，默认：count
+					dataName: "data", //规定数据列表的字段名称，默认：data
+				},
+				request: {
+					pageName: 'index', //页码的参数名称，默认：page
+					limitName: 'size' //每页数据量的参数名，默认：limit
+				},
+				id: 'test'
 			});
+			//搜素框
+			//以下是搜索框进行监测
+			var active = {
+				reload: function () {
+					var demoReload = $('#searchIpt');
+					console.log(demoReload.val());	//得到搜索框里已输入的数据
+					//执行重载
+					table.reload('test', {
+						page: {
+							curr: 1 //重新从第 1 页开始
+						}
+						, where: {
+							supplierName: demoReload.val()		//在表格中进行搜索
+						}
+					});
+				}
+			};
 
+			$('#btn .pear-btn').on('click', function () {
+				var type = $(this).data('type');
+				active[type] ? active[type].call(this) : '';
+			});
 			table.on('tool(role-table)', function (obj) {
 				if (obj.event === 'remove') {
 					window.remove(obj);

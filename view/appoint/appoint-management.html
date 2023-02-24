@@ -19,7 +19,7 @@
         <i class="layui-icon layui-icon-add-1"></i>
         新增
       </button>
-      <form class="layui-form" style="float: right;"id="btn">
+	  <form class="layui-form" style="float: right;"id="btn">
         <div class="layui-form-item" style="display: flex;">
           <div class="layui-input-block">
             <input
@@ -128,7 +128,7 @@
 							curr: 1 //重新从第 1 页开始
 						}
 						, where: {
-							supplierName: demoReload.val()		//在表格中进行搜索
+							user_name: demoReload.val()		//在表格中进行搜索
 						}
 					});
 				}
@@ -241,7 +241,7 @@
 					layer.close(index);
 					let loading = layer.load();
 					$.ajax({
-						url: "http://8.130.51.18:8080/patientmanagerment/deletById",
+						url: "http://8.130.51.18:8080/reservation/deletById",
 						data: {
 							id: obj.data["id"],
 						},

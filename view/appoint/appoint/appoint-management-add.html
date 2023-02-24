@@ -10,35 +10,44 @@
 <body class="pear-container" id="id">
     <div class="layui-card">
         <div class="layui-card-body">
-            <table id="appoint-management-table" lay-filter="appoint-management-table"></table>
+            <table id="role-table" lay-filter="role-table"></table>
         </div>
     </div>
 
-    <script type="text/html" id="appoint-management-toolbar">
-        <button class="pear-btn pear-btn-primary pear-btn-md" lay-event="batchRemove">
-            <i class="layui-icon layui-icon-add-1"></i>
-            返回
-        </button>
+    <script type="text/html" id="role-toolbar">
         <button class="pear-btn pear-btn-danger pear-btn-md"lay-event="add">
             <i class="layui-icon layui-icon-add-1"></i>
             新建患者
         </button>
-        <!-- 查询 -->
-        <div class="layui-form-item layui-inline" style="float:right ;" >
-            <div class="layui-input-inline" style="display: flex;">
-                <input type="text" name="name" placeholder="" class="layui-input">
-                <button class="pear-btn pear-btn-md pear-btn-primary" lay-submit lay-filter="role-query">
-                    <i class="layui-icon layui-icon-search"></i>
-                    查询
-                </button>
+        <form class="layui-form" style="float: right;"id="btn">
+            <div class="layui-form-item" style="display: flex;">
+              <div class="layui-input-block">
+                <input
+                  type="text"
+                  name=""
+                  placeholder="请输入"
+                  autocomplete="off"
+                  class="layui-input"
+                  id="searchIpt"
+                />
+              </div>
+              <button
+                type="button"
+                class="pear-btn pear-btn-md pear-btn-primary"
+                data-type="reload"
+                lay-filter="appoint-management-query"
+              >
+                <i class="layui-icon layui-icon-search"></i>
+                查询
+              </button>
             </div>
-        </div>
+          </form>
     </script>
-
-    <script type="text/html" id="appoint-management-bar">
-        <button class="pear-btn pear-btn-primary pear-btn-sm" lay-event="edit"><i class="layui-icon layui-icon-edit"></i></button>
-    </script>
-
+    <script type="text/html" id="role-bar">
+        <button class="pear-btn pear-btn-danger pear-btn-sm" lay-event="remove">
+          <i class="layui-icon layui-icon-delete"></i>
+        </button>
+      </script>
     <!-- <script type="text/html" id="appoint-management-enable">
         <input type="checkbox" name="enable" value="{{d.id}}" lay-skin="switch" lay-text="上架|下架" lay-filter="user-enable" checked = "{{ d.id == 10003 ? 'true' : 'false' }}">
     </script> -->
@@ -56,44 +65,70 @@
             let cols = [
                 [
                     { title: '类型', field: 'id', align: 'center', width: 100 },
-                    { title: '患者名称', field: 'user_id', align: 'center', width: 100 },
+                    { title: '患者名称', field: 'user_name', align: 'center', width: 100 },
                     { title: '性别', field: 'user_sex', align: 'center' },
                     { title: '年龄', field: 'user_age', align: 'center', },
                     { title: '手机号码', field: 'phone', align: 'center' },
-                    { title: '身份证号', field: 'address', align: 'center', },
-                    { title: '负责人', field: 'status', align: 'center', width: 100 },
-                    { title: '状态', field: 'user_appoint', align: 'center', width: 100 },
-                    { title: '预约天数', field: 'department', align: 'center', width: 100, },
-                    { title: '操作', toolbar: '#appoint-managemen-bar', align: 'center', width: 195 }
-                ]
+                    { title: '身份证号', field: 'identity', align: 'center', },
+                    //{ title: '负责人', field: 'status', align: 'center', width: 100 },
+                    { title: '状态', field: 'status', align: 'center', width: 100 },
+                    { title: '预约天数', field: 'day', align: 'center', width: 100, },
+                    {
+                        title: "操作",
+                        toolbar: "#role-bar",
+                        align: "center",
+                        width: 195,
+                    },]
             ]
 
             table.render({
-                elem: '#appoint-management-table',
+                elem: "#role-table",
                 url: 'http://8.130.51.18:8080/patientmanagerment/selectById',
                 page: true,
                 cols: cols,
                 skin: 'line',
-                toolbar: '#appoint-management-toolbar',
+                toolbar: "#role-toolbar",
                 totalRow: true,
-				//数据表格携带token
-				//headers: {
-				//	token: localStorage.getItem("token")
-				//},
-				response: {
-					statusName: "code", //规定数据状态的字段名称，默认：code
-					statusCode: 200, //规定成功的状态码，默认：0
-					msgName: "msg", //规定状态信息的字段名称，默认：msg
-					//countName: "count", //规定数据总数的字段名称，默认：count
-					dataName: "data", //规定数据列表的字段名称，默认：data
-				},
-				request: {
-					pageName: 'index', //页码的参数名称，默认：page
-					limitName: 'size' //每页数据量的参数名，默认：limit
-				},
-				id: 'test'
+                //数据表格携带token
+                //headers: {
+                //	token: localStorage.getItem("token")
+                //},
+                response: {
+                    statusName: "code", //规定数据状态的字段名称，默认：code
+                    statusCode: 200, //规定成功的状态码，默认：0
+                    msgName: "msg", //规定状态信息的字段名称，默认：msg
+                    //countName: "count", //规定数据总数的字段名称，默认：count
+                    dataName: "data", //规定数据列表的字段名称，默认：data
+                },
+                request: {
+                    pageName: 'index', //页码的参数名称，默认：page
+                    limitName: 'size' //每页数据量的参数名，默认：limit
+                },
+                id: 'test'
             });
-            table.on('tool(appoint-management-table)', function (obj) {
+            //搜素框
+			//以下是搜索框进行监测
+			var active = {
+				reload: function () {
+					var demoReload = $('#searchIpt');
+					console.log(demoReload.val());	//得到搜索框里已输入的数据
+					//执行重载
+					table.reload('test', {
+						page: {
+							curr: 1 //重新从第 1 页开始
+						}
+						, where: {
+							user_name: demoReload.val()		//在表格中进行搜索
+						}
+					});
+				}
+			};
+
+			$('#btn .pear-btn').on('click', function () {
+				var type = $(this).data('type');
+				active[type] ? active[type].call(this) : '';
+			});
+            table.on("tool(role-table)", function (obj) {
                 if (obj.event === 'remove') {
                     window.remove(obj);
                 } else if (obj.event === 'edit') {
@@ -103,7 +138,7 @@
                 }
             });
 
-            table.on('toolbar(appoint-management-table)', function (obj) {
+            table.on("toolbar(role-table)", function (obj) {
                 if (obj.event === 'add') {
                     window.add();
                 } else if (obj.event === 'refresh') {
@@ -137,8 +172,8 @@
                     content: MODULE_PATH + 'patient-management-add.html',
                     //moveOut: true,
                     zIndex: layer.zIndex, //重点1
-                    success: function(layero){
-                      layer.setTop(layero); //重点2
+                    success: function (layero) {
+                        layer.setTop(layero); //重点2
                     }
                 });
             }
@@ -150,32 +185,40 @@
                     title: '修改',
                     shade: 0.1,
                     area: ['600px', '500px'],
+                    moveOut: true,
                     content: MODULE_PATH + 'edit.html?id=' + obj.data.id
                 });
             }
-
+          
             window.remove = function (obj) {
-                layer.confirm('确定要删除该数据吗?', { icon: 3, title: '提示' }, function (index) {
-                    layer.close(index);
-                    let loading = layer.load();
-                    $.ajax({
-                        url: "http://www.j236.com/admin/banner/delete",
-                        data: {
-                            id: obj.data['id']
-                        },
-                        success: function (result) {
-                            layer.close(loading);
-                            if (result.code == 0) {
-                                layer.msg(result.msg, { icon: 1, time: 1000 }, function () {
-                                    obj.del();
-                                });
-                            } else {
-                                layer.msg(result.msg, { icon: 2, time: 1000 });
-                            }
-                        }
-                    })
-                });
-            }
+                layer.confirm(
+                    "确定要删除该数据吗?",
+                    { icon: 3, title: "提示" },
+                    function (index) {
+                        layer.close(index);
+                        let loading = layer.load();
+                        console.log(obj.data["id"]);
+                        $.ajax({
+                            url: "http://8.130.51.18:8080/patientmanagerment/deletByIde",
+                            data: {
+                                id: obj.data["id"],
+                            },
+                            type: 'post',
+                            success: function (result) {
+                                layer.close(loading);
+                                if (result.code == 200) {
+                                    layer.msg(result.msg, { icon: 1, time: 1000 }, function () {
+                                        obj.del();
+                                    });
+                                } else {
+                                    console.log(obj.data["id"]);
+                                    layer.msg(result.msg, { icon: 2, time: 1000 });
+                                }
+                            },
+                        });
+                    }
+                );
+            };
 
             window.batchRemove = function (obj) {
                 let data = table.checkStatus(obj.config.id).data;

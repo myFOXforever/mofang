@@ -126,8 +126,9 @@
             form.on('submit(user-save)', function (data) {
                 console.info(data.field);
                 $.ajax({
-                    url: 'http://8.130.51.18:8080/patientmanagerment/updateById',
+                    url: 'http://8.130.51.18:8080/reservation/updateById',
                     data: JSON.stringify(data.field),
+            contentType: "application/json",
                     type:"post",
                     success: function (result) {
                         if (result.code == 200) {
