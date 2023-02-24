@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <title>供应商修改</title>
+    <link rel="stylesheet" href="../../../component/pear/css/pear.css" />
+  </head>
+  <body>
+    <form class="layui-form" action="">
+      <div class="mainBox">
+        <div class="main-container">
+          <div
+            class="main-container"
+            style="display: grid; grid-template-columns: repeat(2, 1fr)"
+          >
+            <div class="layui-form-item" style="display: none">
+              <label class="layui-form-label">id</label>
+              <div class="layui-input-block">
+                <input
+                  type="text"
+                  name="id"
+                  placeholder="请输入姓名"
+                  autocomplete="off"
+                  class="layui-input"
+                  id="id"
+                />
+              </div>
+            </div>
+            <div class="layui-form-item">
+              <label class="layui-form-label">供应商名字</label>
+              <div class="layui-input-block">
+                <input
+                  type="text"
+                  name="supplierName"
+                  required
+                  lay-verify="required"
+                  placeholder="请输入姓名"
+                  autocomplete="off"
+                  class="layui-input"
+                  id="supplierName"
+                />
+              </div>
+            </div>
+            <div class="layui-form-item">
+              <label class="layui-form-label">类型</label>
+              <div class="layui-input-block">
+                <input
+                  type="text"
+                  name="type"
+                  required
+                  lay-verify="required"
+                  placeholder="请输入姓名"
+                  autocomplete="off"
+                  class="layui-input"
+                  id="type"
+                />
+              </div>
+            </div>
+            <div class="layui-form-item">
+              <label class="layui-form-label">状态</label>
+              <div class="layui-input-block">
+                <input
+                  type="text"
+                  name="status"
+                  required
+                  lay-verify="required"
+                  placeholder="请输入姓名"
+                  autocomplete="off"
+                  class="layui-input"
+                  id="status"
+                />
+              </div>
+            </div>
+            <div class="layui-form-item">
+              <label class="layui-form-label">员工数量</label>
+              <div class="layui-input-block">
+                <input
+                  type="text"
+                  name="employeesNumber"
+                  required
+                  lay-verify="required"
+                  placeholder="请输入姓名"
+                  autocomplete="off"
+                  class="layui-input"
+                  id="employeesNumber"
+                />
+              </div>
+            </div>
+            <div class="layui-form-item">
+              <label class="layui-form-label">省市</label>
+              <div class="layui-input-block">
+                <input
+                  type="text"
+                  name="province"
+                  required
+                  lay-verify="required"
+                  placeholder="请输入用户名"
+                  autocomplete="off"
+                  class="layui-input"
+                  id="province"
+                />
+              </div>
+            </div>
+            <div class="layui-form-item">
+              <label class="layui-form-label">地址</label>
+              <div class="layui-input-block">
+                <input
+                  type="text"
+                  name="address"
+                  required
+                  lay-verify="required"
+                  placeholder="请输入姓名"
+                  autocomplete="off"
+                  class="layui-input"
+                  id="address"
+                />
+              </div>
+            </div>
+            <div class="layui-form-item">
+              <label class="layui-form-label">联系人</label>
+              <div class="layui-input-block">
+                <input
+                  type="text"
+                  name="contacts"
+                  required
+                  lay-verify="required"
+                  placeholder="请输入手机号码"
+                  autocomplete="off"
+                  class="layui-input"
+                  id="contacts"
+                />
+              </div>
+            </div>
+            <div class="layui-form-item">
+              <label class="layui-form-label">产品数</label>
+              <div class="layui-input-block">
+                <input
+                  type="text"
+                  name="productNumber"
+                  required
+                  lay-verify="required"
+                  placeholder="请输入姓名"
+                  autocomplete="off"
+                  class="layui-input"
+                  id="productNumber"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="bottom">
+        <div class="button-container">
+          <button
+            type="submit"
+            class="layui-btn layui-btn-normal layui-btn-sm"
+            lay-submit
+            lay-filter="role-save"
+          >
+            <i class="layui-icon layui-icon-ok"></i>
+            提交
+          </button>
+          <button type="reset" class="layui-btn layui-btn-primary layui-btn-sm">
+            <i class="layui-icon layui-icon-refresh"></i>
+            重置
+          </button>
+        </div>
+      </div>
+    </form>
+    <script src="../../../component/layui/layui.js"></script>
+    <script src="../../../component/pear/pear.js"></script>
+    <script
+      charset="utf-8"
+      src="../../js/kindeditor/kindeditor-all-min.js"
+    ></script>
+    <script
+      type="text/javascript"
+      src="../../../component/layui/base.js"
+    ></script>
+    <script>
+        //解决中文乱码问题
+      function GetQueryString(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+        var r = window.location.search.substr(1).match(reg);
+        if (r != null) return decodeURI(r[2]); //解决了中文乱码/解决了中文乱码
+        return null;
+      }
+      //获取url后面携带的参数
+      let id = GetQueryString("id");
+      let supplierName = GetQueryString("supplierName");
+      let status = GetQueryString("status");
+      let type = GetQueryString("type");
+      let employeesNumber = GetQueryString("employeesNumber");
+      let province = GetQueryString("province");
+      let address = GetQueryString("address");
+      let contacts = GetQueryString("contacts");
+      let productNumber = GetQueryString("productNumber");
+      layui.use(["form", "jquery", "upload"], function () {
+        let form = layui.form;
+        let $ = layui.jquery;
+        let upload = layui.upload;
+        $("#id").val(id);
+        //console.log(id);
+        $("#type").val(type);
+        $("#supplierName").val(supplierName);
+        //console.log(supplierName);
+        $("#status").val(status);
+        $("#employeesNumber").val(employeesNumber);
+        $("#province").val(province);
+        $("#address").val(address);
+        $("#contacts").val(contacts);
+        $("#productNumber").val(productNumber);
+       // $("#type").val(type);
+        form.on("submit(role-save)", function (data) {
+          console.log(data.field);
+          $.ajax({
+            url: "http://8.130.51.18:8080/supplier/update",
+            type: "post",
+            //data:data.field,
+            data: JSON.stringify(data.field),
+            //dataType: 'json',
+            contentType: "application/json",
+            //携带token
+            beforeSend: function (XMLHttpRequest) {
+              XMLHttpRequest.setRequestHeader(
+                "token",
+                localStorage.getItem("token")
+              );
+            },
+            success: function (result) {
+              if (result.code == 200) {
+                console.log(data.field);
+                layer.msg(result.msg, { icon: 1, time: 1000 }, function () {
+                  parent.layer.close(parent.layer.getFrameIndex(window.name)); //关闭当前页
+                  window.parent.location.reload();
+                });
+              } else {
+                layer.msg(result.msg, { icon: 2, time: 1000 });
+              }
+            },
+          });
+          return false;
+        });
+      });
+    </script>
+    <script></script>
+  </body>
+</html>

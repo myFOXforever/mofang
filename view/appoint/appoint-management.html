@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8" />
+	<title>预约管理</title>
+	<link href="../../component/pear/css/pear.css" rel="stylesheet" />
+</head>
+
+<body class="pear-container">
+	<div class="layui-card">
+		<div class="layui-card-body">
+			<table id="role-table" lay-filter="role-table"></table>
+		</div>
+	</div>
+
+	<script type="text/html" id="role-toolbar">
+      <button class="pear-btn pear-btn-primary pear-btn-md" lay-event="add">
+        <i class="layui-icon layui-icon-add-1"></i>
+        新增
+      </button>
+      <form class="layui-form" style="float: right;"id="btn">
+        <div class="layui-form-item" style="display: flex;">
+          <div class="layui-input-block">
+            <input
+              type="text"
+              name=""
+              placeholder="请输入"
+              autocomplete="off"
+              class="layui-input"
+              id="searchIpt"
+            />
+          </div>
+          <button
+            type="button"
+            class="pear-btn pear-btn-md pear-btn-primary"
+            data-type="reload"
+            lay-filter="appoint-management-query"
+          >
+            <i class="layui-icon layui-icon-search"></i>
+            查询
+          </button>
+        </div>
+      </form>
+    </script>
+
+	<script type="text/html" id="role-bar">
+      <button class="pear-btn pear-btn-primary pear-btn-sm" lay-event="edit">
+        <i class="layui-icon layui-icon-edit"></i>
+      </button>
+      <button class="pear-btn pear-btn-danger pear-btn-sm" lay-event="remove">
+        <i class="layui-icon layui-icon-delete"></i>
+      </button>
+    </script>
+
+	<script type="text/html" id="role-enable">
+      <input
+        type="checkbox"
+        name="enable"
+        value="{{d.id}}"
+        lay-skin="switch"
+        lay-text="上架|下架"
+        lay-filter="user-enable"
+        checked="{{ d.id == 10003 ? 'true' : 'false' }}"
+      />
+    </script>
+
+	<script src="../../component/layui/layui.js"></script>
+	<script src="../../component/pear/pear.js"></script>
+	<script>
+		layui.use(["table", "form", "jquery", "laypage"], function () {
+			let table = layui.table;
+			let form = layui.form;
+			let $ = layui.jquery;
+			let laypage = layui.laypage;
+			let MODULE_PATH = "./appoint/";
+			let page1 = 1;
+			let cols = [
+				[
+					{ title: '预约日期', field: 'id', align: 'center', width: 100 },
+					{ title: '姓名', field: 'user_name', align: 'center', width: 100 },
+					{ title: '性别', field: 'user_sex', align: 'center' },
+					{ title: '年龄', field: 'user_age', align: 'center', },
+					{ title: '手机', field: 'phone', align: 'center' },
+					{ title: '地址', field: 'address', align: 'center', },
+					{ title: '状态', field: 'status', align: 'center', width: 100 },
+					{ title: '预约人', field: 'user_appoint', align: 'center', width: 100 },
+					{ title: '预约部门', field: 'department', align: 'center', width: 100 },
+					{ title: '创建时间', field: 'create_time', align: 'center', width: 100 },
+					{ title: '操作', toolbar: "#role-bar", align: 'center', width: 195 }
+				]
+			]
+
+			table.render({
+				elem: "#role-table",
+				url: "http://8.130.51.18:8080/reservation/selectById",
+				page: true,
+				cols: cols,
+				skin: "line",
+				toolbar: "#role-toolbar",
+				totalRow: true,
+				//数据表格携带token
+				//headers: {
+				//	token: localStorage.getItem("token")
+				//},
+				response: {
+					statusName: "code", //规定数据状态的字段名称，默认：code
+					statusCode: 200, //规定成功的状态码，默认：0
+					msgName: "msg", //规定状态信息的字段名称，默认：msg
+					//countName: "count", //规定数据总数的字段名称，默认：count
+					dataName: "data", //规定数据列表的字段名称，默认：data
+				},
+				request: {
+					pageName: 'index', //页码的参数名称，默认：page
+					limitName: 'size' //每页数据量的参数名，默认：limit
+				},
+				id: 'test'
+			});
+			//搜素框
+			//以下是搜索框进行监测
+			var active = {
+				reload: function () {
+					var demoReload = $('#searchIpt');
+					console.log(demoReload.val());	//得到搜索框里已输入的数据
+					//执行重载
+					table.reload('test', {
+						page: {
+							curr: 1 //重新从第 1 页开始
+						}
+						, where: {
+							supplierName: demoReload.val()		//在表格中进行搜索
+						}
+					});
+				}
+			};
+
+			$('#btn .pear-btn').on('click', function () {
+				var type = $(this).data('type');
+				active[type] ? active[type].call(this) : '';
+			});
+
+		table.on("tool(role-table)", function (obj) {
+			if (obj.event === "remove") {
+				window.remove(obj);
+			} else if (obj.event === "edit") {
+				window.edit(obj);
+			} else if (obj.event === "power") {
+				window.power(obj);
+			}
+		});
+
+		table.on("toolbar(role-table)", function (obj) {
+			if (obj.event === "add") {
+				window.add();
+			} else if (obj.event === "refresh") {
+				window.refresh();
+			} else if (obj.event === "change") {
+				window.change();
+			} else if (obj.event === "highSearch") {
+				window.highSearch();
+			}
+		});
+
+		form.on("submit(role-query)", function (data) {
+			table.reload("role-table", { where: data.field });
+			return false;
+		});
+
+		form.on("switch(role-enable)", function (obj) {
+			layer.tips(
+				this.value + " " + this.name + "：" + obj.elem.checked,
+				obj.othis
+			);
+		});
+		// 监听搜索操作
+		form.on('submit(data-search-btn)', function (data) {
+			var username = $("#username").val();
+
+			//执行搜索重载
+			table.reload('currentTableId', {
+				page: {
+					curr: 1
+				}
+				, where: {
+					username: username
+				}
+			}, 'data');
+			return false;
+		});
+		window.add = function () {
+			layer.open({
+				type: 2,
+				title: "新增",
+				shade: 0.1,
+				maxmin: true,
+				area: ["600px", "500px"],
+				//content:'<table id="appoint-management-table" lay-filter="appoint-management-table"></table>',
+				content: MODULE_PATH + "appoint-management-add.html",
+			});
+		};
+		window.change = function () {
+			layer.open({
+				type: 2,
+				title: "转交",
+				shade: 0.1,
+				maxmin: true,
+				area: ["400px", "200px"],
+				content: MODULE_PATH + "provider-management-change.html",
+			});
+		};
+		window.highSearch = function () {
+			layer.open({
+				type: 2,
+				title: "高级搜索",
+				shade: 0.1,
+				maxmin: true,
+				area: ["600px", "400px"],
+				content: MODULE_PATH + "provider-management-highSearch.html",
+			});
+		};
+
+		window.edit = function (obj) {
+			layer.open({
+				type: 2,
+				title: "修改",
+				shade: 0.1,
+				area: ["600px", "300px"],
+				content: MODULE_PATH + "appoint-management-edit.html?id=" + obj.data.id
+					+ "&appoint_time=" + obj.data.appoint_time + "&user_name=" + obj.data.user_name
+					+ "&phone=" + obj.data.phone + "&department=" + obj.data.department +
+					"&user_age=" + obj.data.user_age + "&user_sex=" + obj.data.user_sex
+					//+ "&contacts=" + obj.data.contacts + "&productNumber=" + obj.data.productNumber,
+			});
+		};
+
+		window.remove = function (obj) {
+			layer.confirm(
+				"确定要删除该数据吗?",
+				{ icon: 3, title: "提示" },
+				function (index) {
+					layer.close(index);
+					let loading = layer.load();
+					$.ajax({
+						url: "http://8.130.51.18:8080/patientmanagerment/deletById",
+						data: {
+							id: obj.data["id"],
+						},
+						type: 'post',
+						success: function (result) {
+							layer.close(loading);
+							if (result.code == 200) {
+								layer.msg(result.msg, { icon: 1, time: 1000 }, function () {
+									obj.del();
+								});
+							} else {
+								console.log(obj.data["id"]);
+								layer.msg(result.msg, { icon: 2, time: 1000 });
+							}
+						},
+					});
+				}
+			);
+		};
+
+
+		window.batchRemove = function (obj) {
+			let data = table.checkStatus(obj.config.id).data;
+			if (data.length === 0) {
+				layer.msg("未选中数据", { icon: 3, time: 1000 });
+				return false;
+			}
+			let ids = "";
+			for (let i = 0; i < data.length; i++) {
+				ids += data[i].userId + ",";
+			}
+			ids = ids.substr(0, ids.length - 1);
+			layer.confirm(
+				"确定要删除这些用户",
+				{ icon: 3, title: "提示" },
+				function (index) {
+					layer.close(index);
+					let loading = layer.load();
+					$.ajax({
+						url: MODULE_PATH + "batchRemove/" + ids,
+						dataType: "json",
+						type: "delete",
+						success: function (result) {
+							layer.close(loading);
+							if (result.success) {
+								layer.msg(result.msg, { icon: 1, time: 1000 }, function () {
+									table.reload("user-table");
+								});
+							} else {
+								layer.msg(result.msg, { icon: 2, time: 1000 });
+							}
+						},
+					});
+				}
+			);
+		};
+
+		window.refresh = function () {
+			table.reload("role-table");
+		};
+      		});
+	</script>
+</body>
+
+</html>

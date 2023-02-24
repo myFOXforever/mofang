@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <title>药品修改</title>
+    <link rel="stylesheet" href="../../../component/pear/css/pear.css" />
+  </head>
+  <body>
+    <form class="layui-form" action="">
+      <div class="mainBox">
+        <div class="main-container">
+          <div
+            class="main-container"
+            style="display: grid; grid-template-columns: repeat(2, 1fr)"
+          >
+            <div class="layui-form-item" style="display: none">
+              <label class="layui-form-label">id</label>
+              <div class="layui-input-block">
+                <input
+                  type="text"
+                  name="id"
+                  autocomplete="off"
+                  class="layui-input"
+                  id="id"
+                />
+              </div>
+            </div>
+            <div class="layui-form-item">
+              <label class="layui-form-label">药品名字</label>
+              <div class="layui-input-block">
+                <input
+                  type="text"
+                  name="drugName"
+                  required
+                  lay-verify="required"
+                  placeholder="请输入姓名"
+                  autocomplete="off"
+                  class="layui-input"
+                  id="drugName"
+                />
+              </div>
+            </div>
+            <div class="layui-form-item">
+              <label class="layui-form-label">药品类型</label>
+              <div class="layui-input-block">
+                <input
+                  type="text"
+                  name="type"
+                  required
+                  lay-verify="required"
+                  placeholder="请输入姓名"
+                  autocomplete="off"
+                  class="layui-input"
+                  id="type"
+                />
+              </div>
+            </div>
+            <div class="layui-form-item">
+              <label class="layui-form-label">状态</label>
+              <div class="layui-input-block">
+                <input
+                  type="text"
+                  name="status"
+                  required
+                  lay-verify="required"
+                  placeholder="请输入姓名"
+                  autocomplete="off"
+                  class="layui-input"
+                  id="status"
+                />
+              </div>
+            </div>
+            <div class="layui-form-item">
+              <label class="layui-form-label">价格</label>
+              <div class="layui-input-block">
+                <input
+                  type="text"
+                  name="price"
+                  required
+                  lay-verify="required"
+                  placeholder="请输入姓名"
+                  autocomplete="off"
+                  class="layui-input"
+                  id="price"
+                />
+              </div>
+            </div>
+            <div class="layui-form-item">
+              <label class="layui-form-label">数量</label>
+              <div class="layui-input-block">
+                <input
+                  type="text"
+                  name="drugNumber"
+                  required
+                  lay-verify="required"
+                  placeholder="请输入用户名"
+                  autocomplete="off"
+                  class="layui-input"
+                  id="drugNumber"
+                />
+              </div>
+            </div>
+            <div class="layui-form-item">
+              <label class="layui-form-label">单位</label>
+              <div class="layui-input-block">
+                <input
+                  type="text"
+                  name="company"
+                  required
+                  lay-verify="required"
+                  placeholder="请输入姓名"
+                  autocomplete="off"
+                  class="layui-input"
+                  id="company"
+                />
+              </div>
+            </div>
+            <div class="layui-form-item">
+              <label class="layui-form-label">负责人</label>
+              <div class="layui-input-block">
+                <input
+                  type="text"
+                  name="pic"
+                  required
+                  lay-verify="required"
+                  placeholder="请输入手机号码"
+                  autocomplete="off"
+                  class="layui-input"
+                  id="pic"
+                />
+              </div>
+            </div>
+            <div class="layui-form-item">
+              <label class="layui-form-label">供应商名字</label>
+              <div class="layui-input-block">
+                <input
+                  type="text"
+                  name="supplierName"
+                  required
+                  lay-verify="required"
+                  placeholder="请输入姓名"
+                  autocomplete="off"
+                  class="layui-input"
+                  id="supplierName"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="bottom">
+        <div class="button-container">
+          <button
+            type="submit"
+            class="layui-btn layui-btn-normal layui-btn-sm"
+            lay-submit
+            lay-filter="role-save"
+          >
+            <i class="layui-icon layui-icon-ok"></i>
+            提交
+          </button>
+          <button type="reset" class="layui-btn layui-btn-primary layui-btn-sm">
+            <i class="layui-icon layui-icon-refresh"></i>
+            重置
+          </button>
+        </div>
+      </div>
+    </form>
+    <script src="../../../component/layui/layui.js"></script>
+    <script src="../../../component/pear/pear.js"></script>
+    <script
+      charset="utf-8"
+      src="../../js/kindeditor/kindeditor-all-min.js"
+    ></script>
+    <script
+      type="text/javascript"
+      src="../../../component/layui/base.js"
+    ></script>
+    <script>
+        //解决中文乱码问题
+      function GetQueryString(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+        var r = window.location.search.substr(1).match(reg);
+        if (r != null) return decodeURI(r[2]); //解决了中文乱码/解决了中文乱码
+        return null;
+      }
+      //获取url后面携带的参数
+      let id = GetQueryString("id");
+      let drugName = GetQueryString("drugName");
+      let status = GetQueryString("status");
+      let type = GetQueryString("type");
+      let price = GetQueryString("price");
+      let drugNumber = GetQueryString("drugNumber");
+      let company = GetQueryString("company");
+      let pic = GetQueryString("pic");
+      let supplierName = GetQueryString("supplierName");
+      layui.use(["form", "jquery", "upload"], function () {
+        let form = layui.form;
+        let $ = layui.jquery;
+        let upload = layui.upload;
+        $("#id").val(id);
+        //console.log(id);
+        $("#type").val(type);
+        $("#drugName").val(drugName);
+        //console.log(drugName);
+        $("#status").val(status);
+        $("#price").val(price);
+        $("#drugNumber").val(drugNumber);
+        $("#company").val(company);
+        $("#pic").val(pic);
+        $("#supplierName").val(supplierName);
+       // $("#type").val(type);
+        form.on("submit(role-save)", function (data) {
+          console.log(data.field);
+          $.ajax({
+            url: "http://8.130.51.18:8080/drug/update",
+            type: "post",
+            data: JSON.stringify(data.field),
+            //dataType: 'json',
+            contentType: "application/json",
+            //携带token
+            beforeSend: function (XMLHttpRequest) {
+              XMLHttpRequest.setRequestHeader(
+                "token",
+                localStorage.getItem("token")
+              );
+            },
+            success: function (result) {
+              if (result.code == 200) {
+                console.log(data.field);
+                layer.msg(result.msg, { icon: 1, time: 1000 }, function () {
+                  parent.layer.close(parent.layer.getFrameIndex(window.name)); //关闭当前页
+                  window.parent.location.reload();
+                });
+              } else {
+                layer.msg(result.msg, { icon: 2, time: 1000 });
+              }
+            },
+          });
+          return false;
+        });
+      });
+    </script>
+    <script></script>
+  </body>
+</html>

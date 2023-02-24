@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>预约增加</title>
+    <link rel="stylesheet" href="../../../component/pear/css/pear.css" />
+</head>
+
+<body class="pear-container" id="id">
+    <div class="layui-card">
+        <div class="layui-card-body">
+            <table id="appoint-management-table" lay-filter="appoint-management-table"></table>
+        </div>
+    </div>
+
+    <script type="text/html" id="appoint-management-toolbar">
+        <button class="pear-btn pear-btn-primary pear-btn-md" lay-event="batchRemove">
+            <i class="layui-icon layui-icon-add-1"></i>
+            返回
+        </button>
+        <button class="pear-btn pear-btn-danger pear-btn-md"lay-event="add">
+            <i class="layui-icon layui-icon-add-1"></i>
+            新建患者
+        </button>
+        <!-- 查询 -->
+        <div class="layui-form-item layui-inline" style="float:right ;" >
+            <div class="layui-input-inline" style="display: flex;">
+                <input type="text" name="name" placeholder="" class="layui-input">
+                <button class="pear-btn pear-btn-md pear-btn-primary" lay-submit lay-filter="role-query">
+                    <i class="layui-icon layui-icon-search"></i>
+                    查询
+                </button>
+            </div>
+        </div>
+    </script>
+
+    <script type="text/html" id="appoint-management-bar">
+        <button class="pear-btn pear-btn-primary pear-btn-sm" lay-event="edit"><i class="layui-icon layui-icon-edit"></i></button>
+    </script>
+
+    <!-- <script type="text/html" id="appoint-management-enable">
+        <input type="checkbox" name="enable" value="{{d.id}}" lay-skin="switch" lay-text="上架|下架" lay-filter="user-enable" checked = "{{ d.id == 10003 ? 'true' : 'false' }}">
+    </script> -->
+
+    <script src="../../../component/layui/layui.js"></script>
+    <script src="../../../component/pear/pear.js"></script>
+    <script>
+        layui.use(['table', 'form', 'jquery'], function () {
+            let table = layui.table;
+            let form = layui.form;
+            let $ = layui.jquery;
+
+            let MODULE_PATH = "../../patient/patient/";
+
+            let cols = [
+                [
+                    { title: '类型', field: 'id', align: 'center', width: 100 },
+                    { title: '患者名称', field: 'user_id', align: 'center', width: 100 },
+                    { title: '性别', field: 'user_sex', align: 'center' },
+                    { title: '年龄', field: 'user_age', align: 'center', },
+                    { title: '手机号码', field: 'phone', align: 'center' },
+                    { title: '身份证号', field: 'address', align: 'center', },
+                    { title: '负责人', field: 'status', align: 'center', width: 100 },
+                    { title: '状态', field: 'user_appoint', align: 'center', width: 100 },
+                    { title: '预约天数', field: 'department', align: 'center', width: 100, },
+                    { title: '操作', toolbar: '#appoint-managemen-bar', align: 'center', width: 195 }
+                ]
+            ]
+
+            table.render({
+                elem: '#appoint-management-table',
+                url: 'http://8.130.51.18:8080/patientmanagerment/selectById',
+                page: true,
+                cols: cols,
+                skin: 'line',
+                toolbar: '#appoint-management-toolbar',
+                totalRow: true,
+				//数据表格携带token
+				//headers: {
+				//	token: localStorage.getItem("token")
+				//},
+				response: {
+					statusName: "code", //规定数据状态的字段名称，默认：code
+					statusCode: 200, //规定成功的状态码，默认：0
+					msgName: "msg", //规定状态信息的字段名称，默认：msg
+					//countName: "count", //规定数据总数的字段名称，默认：count
+					dataName: "data", //规定数据列表的字段名称，默认：data
+				},
+				request: {
+					pageName: 'index', //页码的参数名称，默认：page
+					limitName: 'size' //每页数据量的参数名，默认：limit
+				},
+				id: 'test'
+            });
+            table.on('tool(appoint-management-table)', function (obj) {
+                if (obj.event === 'remove') {
+                    window.remove(obj);
+                } else if (obj.event === 'edit') {
+                    window.edit(obj);
+                } else if (obj.event === 'power') {
+                    window.power(obj);
+                }
+            });
+
+            table.on('toolbar(appoint-management-table)', function (obj) {
+                if (obj.event === 'add') {
+                    window.add();
+                } else if (obj.event === 'refresh') {
+                    window.refresh();
+                } else if (obj.event === 'batchRemove') {
+                    window.batchRemove(obj);
+                }
+            });
+            //单元格编辑
+            table.on('edit(appoint-management-table)', function (obj) { //注：edit是固定事件名，test是table原始容器的属性 lay-filter="对应的值"
+                console.log(obj.value); //得到修改后的值
+                console.log(obj.field); //当前编辑的字段名
+                console.log(obj.data); //所在行的所有相关数据  
+            });
+            form.on('submit(appoint-management-query)', function (data) {
+                table.reload('appoint-management-table', { where: data.field })
+                return false;
+            });
+
+            form.on('switch(appoint-management-enable)', function (obj) {
+                layer.tips(this.value + ' ' + this.name + '：' + obj.elem.checked, obj.othis);
+            });
+
+            window.add = function () {
+                layer.open({
+                    type: 2,
+                    title: '新增',
+                    shade: 0.1,
+                    maxmin: true,
+                    area: ['800px', '500px'],
+                    content: MODULE_PATH + 'patient-management-add.html',
+                    //moveOut: true,
+                    zIndex: layer.zIndex, //重点1
+                    success: function(layero){
+                      layer.setTop(layero); //重点2
+                    }
+                });
+            }
+
+
+            window.edit = function (obj) {
+                layer.open({
+                    type: 2,
+                    title: '修改',
+                    shade: 0.1,
+                    area: ['600px', '500px'],
+                    content: MODULE_PATH + 'edit.html?id=' + obj.data.id
+                });
+            }
+
+            window.remove = function (obj) {
+                layer.confirm('确定要删除该数据吗?', { icon: 3, title: '提示' }, function (index) {
+                    layer.close(index);
+                    let loading = layer.load();
+                    $.ajax({
+                        url: "http://www.j236.com/admin/banner/delete",
+                        data: {
+                            id: obj.data['id']
+                        },
+                        success: function (result) {
+                            layer.close(loading);
+                            if (result.code == 0) {
+                                layer.msg(result.msg, { icon: 1, time: 1000 }, function () {
+                                    obj.del();
+                                });
+                            } else {
+                                layer.msg(result.msg, { icon: 2, time: 1000 });
+                            }
+                        }
+                    })
+                });
+            }
+
+            window.batchRemove = function (obj) {
+                let data = table.checkStatus(obj.config.id).data;
+                if (data.length === 0) {
+                    layer.msg("未选中数据", { icon: 3, time: 1000 });
+                    return false;
+                }
+                let ids = "";
+                for (let i = 0; i < data.length; i++) {
+                    ids += data[i].userId + ",";
+                }
+                ids = ids.substr(0, ids.length - 1);
+                layer.confirm('确定要删除这些用户', { icon: 3, title: '提示' }, function (index) {
+                    layer.close(index);
+                    let loading = layer.load();
+                    $.ajax({
+                        url: MODULE_PATH + "batchRemove/" + ids,
+                        dataType: 'json',
+                        type: 'delete',
+                        success: function (result) {
+                            layer.close(loading);
+                            if (result.success) {
+                                layer.msg(result.msg, { icon: 1, time: 1000 }, function () {
+                                    table.reload('user-table');
+                                });
+                            } else {
+                                layer.msg(result.msg, { icon: 2, time: 1000 });
+                            }
+                        }
+                    })
+                });
+            }
+
+            window.refresh = function () {
+                table.reload('appoint-management-table');
+            }
+        })
+    </script>
+</body>
+
+</html>

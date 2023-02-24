@@ -1,0 +1,150 @@
+[
+	{
+		"id":10,
+		"title":"首页",
+		"href":"view/mainpage/mainpage.html"
+	},
+	{
+		"id": 1,
+		"title": "预约管理",
+		"type": 0,
+		"icon": "layui-icon layui-icon-time",
+		"href": "",
+		"children": [{
+			"id": 11,
+			"title": "预约管理",
+			"icon": "layui-icon layui-icon-subtraction",
+			"type": 1,
+			"openType": "_iframe",
+			"href": "view/appoint/appoint-management.html"
+		},
+		{
+			"id": 12,
+			"title": "预约设置",
+			"icon": "layui-icon layui-icon-subtraction",
+			"type": 1,
+			"openType": "_iframe",
+			"href": "view/appoint/appoint-set.html"
+		}]
+	},
+	{
+		"id": "system",
+		"title": "患者管理",
+		"icon": "layui-icon layui-icon-username",
+		"type": 0,
+		"href": "",
+		"children": [{
+			"id": 601,
+			"title": "患者管理",
+			"icon": "layui-icon layui-icon-subtraction",
+			"type": 1,
+			"openType": "_iframe",
+			"href": "view/patient/patient-management.html"
+		},
+			{
+				"id": 602,
+				"title": "患者跟进",
+				"icon": "layui-icon layui-icon-subtraction",
+				"type": 1,
+				"openType": "_iframe",
+				"href": "view/patient/patient-follow.html"
+			},
+
+			{
+				"id": 603,
+				"title": "患者公海",
+				"icon": "layui-icon layui-icon-subtraction",
+				"type": 1,
+				"openType": "_iframe",
+				"href": "view/patient/patient-sea.html"
+			},
+			{
+				"id": 605,
+				"title": "患者报表",
+				"icon": "layui-icon layui-icon-subtraction",
+				"type": 1,
+				"openType": "_iframe",
+				"href": "view/patient/patient-table.html"
+			}
+
+		]
+	},
+	{
+		"id": "community",
+		"title": "诊断管理",
+		"icon": "layui-icon layui-icon-addition",
+		"type": 0,
+		"href": "",
+		"children": [{
+			"id": 100,
+			"title": "诊断管理",
+			"icon": "layui-icon layui-icon-subtraction",
+			"type": 1,
+			"openType": "_iframe",
+			"href": "view/diagnose/diagnose-management.html"
+		},{
+			"id": 101,
+			"title": "诊断报表",
+			"icon": "layui-icon layui-icon-subtraction",
+			"type": 1,
+			"openType": "_iframe",
+			"href": "view/diagnose/diagnose-table.html"
+		}
+		]
+	},
+	{
+		"id": "parking",
+		"title": "供应管理",
+		"icon": "layui-icon layui-icon-cart-simple",
+		"type": 0,
+		"href": "",
+		"children": [{
+			"id": 103,
+			"title": "供应商管理",
+			"icon": "layui-icon layui-icon-subtraction",
+			"type": 1,
+			"openType": "_iframe",
+			"href": "view/provider/provider-management.html"
+		},
+			{
+				"id": 105,
+				"title": "供应商跟进",
+				"icon": "layui-icon layui-icon-subtraction",
+				"type": 1,
+				"openType": "_iframe",
+				"href": "view/provider/provider-follow.html"
+			}]
+	},
+	{
+		"id": "medicine",
+		"title": "药品管理",
+		"icon": "layui-icon layui-icon-cart-simple",
+		"type": 0,
+		"href": "",
+		"children": [{
+			"id": 106,
+			"title": "药品管理",
+			"icon": "layui-icon layui-icon-subtraction",
+			"type": 1,
+			"openType": "_iframe",
+			"href": "view/medicine/medicine-management.html"
+		},
+			{
+				"id": 107,
+				"title": "药品分类",
+				"icon": "layui-icon layui-icon-subtraction",
+				"type": 1,
+				"openType": "_iframe",
+				"href": "view/medicine/medicine-type.html"
+			},
+		
+			{
+				"id": 108,
+				"title": "药品库存",
+				"icon": "layui-icon layui-icon-subtraction",
+				"type": 1,
+				"openType": "_iframe",
+				"href": "view/medicine/medicine-stock.html"
+			}]
+	}
+]

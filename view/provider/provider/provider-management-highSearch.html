@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <title>患者管理</title>
+    <link rel="stylesheet" href="../../../component/pear/css/pear.css" />
+  </head>
+
+  <body>
+    <form class="layui-form" action="">
+      <div class="mainBox">
+        <div class="main-container">
+          <div
+            class="main-container"
+            style="display: grid; grid-template-columns: repeat(2, 1fr)"
+          >
+            <div class="layui-form-item">
+              <label class="layui-form-label">类型</label>
+              <div class="layui-input-block">
+                <input
+                  type="text"
+                  name="type"
+                  required
+                  lay-verify="required"
+                  placeholder="请输入手机号码"
+                  autocomplete="off"
+                  class="layui-input"
+                />
+              </div>
+            </div>
+            <div class="layui-form-item">
+              <label class="layui-form-label">状态</label>
+              <div class="layui-input-block">
+                <input
+                  type="text"
+                  name="status"
+                  required
+                  lay-verify="required"
+                  placeholder="请输入姓名"
+                  autocomplete="off"
+                  class="layui-input"
+                />
+              </div>
+            </div>
+            <div class="layui-form-item">
+              <label class="layui-form-label">供应商</label>
+              <div class="layui-input-block">
+                <input
+                  type="text"
+                  name="supplierName"
+                  required
+                  lay-verify="required"
+                  placeholder="请输入姓名"
+                  autocomplete="off"
+                  class="layui-input"
+                />
+              </div>
+            </div>
+            <!-- <div class="layui-form-item">
+                        <label class="layui-form-label">手机</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="name" required lay-verify="required" placeholder="请输入姓名"
+                                autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">身份证号</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="name" required lay-verify="required" placeholder="请输入姓名"
+                                autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">医保卡号</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="name" required lay-verify="required" placeholder="请输入姓名"
+                                autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">时间起</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="name" required lay-verify="required" placeholder="请输入姓名"
+                                autocomplete="off" class="layui-input">
+                        </div>
+                    </div>  <div class="layui-form-item">
+                        <label class="layui-form-label">时间止</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="name" required lay-verify="required" placeholder="请输入姓名"
+                                autocomplete="off" class="layui-input">
+                        </div>
+                    </div> -->
+          </div>
+        </div>
+      </div>
+      <div class="bottom">
+        <div class="button-container">
+          <button
+            type="submit"
+            class="layui-btn layui-btn-normal layui-btn-sm"
+            lay-submit=""
+            lay-filter="role-save"
+          >
+            <i class="layui-icon layui-icon-ok"></i>
+            提交
+          </button>
+          <button type="reset" class="layui-btn layui-btn-primary layui-btn-sm">
+            <i class="layui-icon layui-icon-refresh"></i>
+            重置
+          </button>
+        </div>
+      </div>
+    </form>
+    <script src="../../../component/layui/layui.js"></script>
+    <script src="../../../component/pear/pear.js"></script>
+
+    <script>
+      layui.use(['form', 'jquery', 'upload', 'dtree'], function () {
+          let form = layui.form;
+          let $ = layui.jquery;
+          let upload = layui.upload;
+
+
+          form.on('submit(role-save)', function (data) {
+            localStorage.setItem("supplierName",data.field["supplierName"]);
+            localStorage.setItem("type",data.field["type"]);
+            localStorage.setItem("status",data.field["status"]);
+      })
+    })
+    </script>
+    <script></script>
+  </body>
+</html>

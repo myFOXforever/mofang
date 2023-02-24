@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>患者管理</title>
+		<link href="../../component/pear/css/pear.css" rel="stylesheet" />
+	</head>
+	<body class="pear-container">
+		<div class="layui-card">
+
+		</div>
+		<div class="layui-card">
+			<div class="layui-card-body">
+				<table id="village_table" lay-filter="village_table"></table>
+			</div>
+		</div>
+
+		<script type="text/html" id="role-toolbar">
+			<button class="pear-btn pear-btn-primary pear-btn-md" lay-event="add">
+				<i class="layui-icon layui-icon-add-1"></i>
+				新增
+			</button>
+			<button class="pear-btn pear-btn-danger pear-btn-md" lay-event="change">
+				<i class="layui-icon layui-icon-delete"></i>
+				转交
+			</button>
+			<button class="pear-btn pear-btn-danger pear-btn-md" lay-event="highSearch">
+				<i class="layui-icon layui-icon-search"></i>
+				高级搜索
+			</button>
+			<button class="pear-btn pear-btn-danger pear-btn-md" lay-event="batchRemove">
+				<i class="layui-icon layui-icon-export"></i>
+				导出
+			</button>
+			<div class="layui-form-item layui-inline" style="float:right ;" >
+				<div class="layui-input-inline" style="display: flex;">
+					<input type="text" name="name" placeholder="" class="layui-input">
+					<button class="pear-btn pear-btn-md pear-btn-primary" lay-submit lay-filter="role-query">
+						<i class="layui-icon layui-icon-search"></i>
+						查询
+					</button>
+				</div>
+			</div>
+		</script>
+
+		<script type="text/html" id="role-bar">
+			<button class="pear-btn pear-btn-primary pear-btn-sm" lay-event="edit"><i class="layui-icon layui-icon-edit"></i></button>
+			<button class="pear-btn pear-btn-danger pear-btn-sm" lay-event="remove"><i class="layui-icon layui-icon-delete"></i></button>
+		</script>
+		<script src="../../component/layui/layui.js"></script>
+		<script src="../../component/pear/pear.js"></script>
+		<script>
+		    layui.use(['table','form','jquery'],function () {
+		        let table = layui.table;
+		        let form = layui.form;
+		        let $ = layui.jquery;
+
+		        let MODULE_PATH = "./patient/";
+
+		        let cols = [
+		            [
+		                {type:'checkbox'},
+                        {title: '类型', field: 'id', align:'center', width:40},
+		                {title: '患者名称', field: 'user_name', align:'center', width:40},
+		                {title: '性别', field: 'user_sex', align:'center'},
+						{title: '年龄', field: 'user_age', align:'center'},
+						{title: '手机号码', field: 'phone', align:'center'},
+						{title: '身份证号', field: 'identity', align:'center'},
+						{title: '医保卡号', field: 'id_card', align:'center'},
+						{title: '省市', field: 'province', align:'center'},
+						{title: '详细地址', field: 'adress', align:'center'},
+						//{title: '负责人', field: 'province', align:'center'},
+						//{title: '创建时间', field: 'create_time', align:'center'},
+					//	{title: '跟进', field: 'email', align:'center'},
+						//{title: '病历', field: 'email', align:'center'},
+						{title: '状态', field: 'status', align:'center'},
+						{title: '操作', toolbar: '#role-bar', align:'center' ,width: 195}
+		            ]
+		        ]
+
+		        table.render({
+		            elem: '#village_table',
+		            url: 'http://8.130.51.18:8080/patientmanagerment/selectById',
+		            page: true ,
+		            cols: cols ,
+		            skin: 'line',
+		            toolbar: '#role-toolbar',
+					totalRow: true,
+				//数据表格携带token
+				//headers: {
+				//	token: localStorage.getItem("token")
+				//},
+				response: {
+					statusName: "code", //规定数据状态的字段名称，默认：code
+					statusCode: 200, //规定成功的状态码，默认：0
+					msgName: "msg", //规定状态信息的字段名称，默认：msg
+					//countName: "count", //规定数据总数的字段名称，默认：count
+					dataName: "data", //规定数据列表的字段名称，默认：data
+				},
+				request: {
+					pageName: 'index', //页码的参数名称，默认：page
+					limitName: 'size' //每页数据量的参数名，默认：limit
+				},
+				id: 'test'
+			});
+			table.on("tool(village_table)", function (obj) {
+				if (obj.event === "remove") {
+					console.log("remove");
+					window.remove(obj);
+				} else if (obj.event === "edit") {
+					console.log("remove");
+					window.edit(obj);
+				} else if (obj.event === "power") {
+					console.log("remove");
+					window.power(obj);
+				}
+			});
+		        table.on('toolbar(village_table)', function(obj){
+		            if(obj.event === 'add'){
+		                window.add();
+		            } else if(obj.event === 'refresh'){
+		                window.refresh();
+		            } else if(obj.event === 'remove'){
+						
+		                window.remove(obj);
+		            }
+					else if(obj.event==='change'){
+						window.change();
+					}
+					else if(obj.event==='highSearch'){
+						window.highSearch();
+					}
+		        });
+
+		        form.on('submit(village-query)', function(data){
+		            table.reload('village_table',{where:data.field})
+		            return false;
+		        });
+
+		        form.on('switch(goods-enable)', function(obj){
+                    var checked = obj.elem.checked;
+                    let status=2;
+
+                    if(checked==true){
+                        status=1;
+					}
+
+                    $.ajax({
+                        url:'http://www.j236.com/admin/goods/updateStatus',
+                        data:{
+                            "goodsId":this.value,
+							"status":status
+						},
+                        type:'post',
+                        success:function(result){
+                            layer.alert("操作成功!");
+                            form.render();
+                        }
+                    })
+
+		        });
+
+		        window.add = function(){
+		            layer.open({
+		                type: 2,
+		                title: '新增',
+		                shade: 0.1,
+                        maxmin: true,
+		                area: ['1000px', '800px'],
+		                content: MODULE_PATH + 'patient-management-add.html'
+		            });
+		        }
+				window.change=function(){
+					layer.open({
+		                type: 2,
+		                title: '转交',
+		                shade: 0.1,
+                        maxmin: true,
+		                area: ['400px', '200px'],
+		                content: MODULE_PATH + 'patient-management-change.html'
+		            });
+				}
+				window.highSearch=function(){
+					layer.open({
+		                type: 2,
+		                title: '高级搜索',
+		                shade: 0.1,
+                        maxmin: true,
+		                area: ['600px', '400px'],
+		                content: MODULE_PATH + 'patient-management-highSearch.html'
+		            });
+				}
+
+		        window.edit = function(obj){
+		            layer.open({
+		                type: 2,
+		                title: '修改患者',
+		                shade: 0.1,
+		                area: ['800px', '500px'],
+                        content: MODULE_PATH +'patient-management-edit.html?id='+obj.data.id
+		            });
+		        }
+
+		        window.remove = function(obj){
+		            layer.confirm('确定要删除该数据', {icon: 3, title:'提示'}, function(index){
+		                layer.close(index);
+		                let loading = layer.load();
+
+                        $.ajax({
+                            url:'http://8.130.51.18:8080/patientmanagerment/deletById',
+                            data:{
+                                "id":obj.data['id']
+                            },
+                            type:'post',
+                            success:function(result){
+                                layer.close(loading);
+                                if(result.code==0){
+                                    layer.msg(result.msg,{icon:1,time:1000},function(){
+                                        obj.del();//前端的假删除
+                                    });
+                                }else{
+                                    layer.msg(result.msg,{icon:2,time:1000});
+                                }
+                            }
+                        })
+
+		            });
+		        }
+
+		        window.batchRemove = function(obj){
+		            let data = table.checkStatus(obj.config.id).data;
+		            if(data.length === 0){
+		                layer.msg("未选中数据",{icon:3,time:1000});
+		                return false;
+		            }
+		            let ids = "";
+		            for(let i = 0;i<data.length;i++){
+		                ids += data[i].id+",";
+		            }
+
+		            //去除最后一个逗号
+		            ids = ids.substr(0,ids.length-1);
+
+		            console.info(ids)
+
+		            layer.confirm('确定要删除这些小区', {icon: 3, title:'提示'}, function(index){
+		                layer.close(index);
+		                let loading = layer.load();
+		                $.ajax({
+		                    url: "http://8.130.51.18:8080/community/village/deleteByIds",
+							data:{
+		                    	"ids":ids
+							},
+		                    type:'POST',
+		                    success:function(result){
+		                        layer.close(loading);
+		                        if(result.code==0){
+		                            layer.msg(result.msg,{icon:1,time:1000},function(){
+		                                table.reload('village_table');
+		                            });
+		                        }else{
+		                            layer.msg(result.msg,{icon:2,time:1000});
+		                        }
+		                    }
+		                })
+		            });
+		        }
+
+		        window.refresh = function(){
+		            table.reload('village_table');
+		        }
+		    })
+		</script>
+	</body>
+</html>
