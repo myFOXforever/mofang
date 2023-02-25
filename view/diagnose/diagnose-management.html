@@ -18,7 +18,7 @@
 				<i class="layui-icon layui-icon-add-1"></i>
 				新增
 			</button>
-			<button class="pear-btn pear-btn-danger pear-btn-md" lay-event="batchRemove">
+			<button class="pear-btn pear-btn-danger pear-btn-md" lay-event="export">
 				<i class="layui-icon layui-icon-delete"></i>
 				导出
 			</button>
@@ -171,8 +171,8 @@
 		                window.add();
 		            } else if(obj.event === 'refresh'){
 		                window.refresh();
-		            } else if(obj.event === 'batchRemove'){
-		                window.batchRemove(obj);
+		            } else if(obj.event === 'export'){
+		                window.export(obj);
 		            }
 		        });
 
@@ -256,42 +256,22 @@
 		            });
 		        }
 
-		        window.batchRemove = function(obj){
-		            let data = table.checkStatus(obj.config.id).data;
-		            if(data.length === 0){
-		                layer.msg("未选中数据",{icon:3,time:1000});
-		                return false;
-		            }
-		            let ids = "";
-		            for(let i = 0;i<data.length;i++){
-		                ids += data[i].id+",";
-		            }
-		            ids = ids.substr(0,ids.length-1);
-		            layer.confirm('确定要删除这些小区', {icon: 3, title:'提示'}, function(index){
-
-
-						$.ajax({
-							url:'http://localhost:8081/sunwise/village/batchDelete',
-							data:{
-							  "ids":ids
-							},
-							type:'get',
-							success:function(result){
-								if(result.code==0){
-									layer.msg(result.msg,{icon:1,time:1000},function(){
-									   table.reload("village-table")
-									});
-								}else{
-									layer.msg(result.msg,{icon:2,time:1000});
-								}
+		        window.export = function(){
+					$.ajax({
+						url:'http://8.130.51.18:8080/diagnosis/excel',
+						type:'get',
+						success:function(result){
+							//layer.close(loading);
+							if(result.code==200){
+								layer.msg(result.msg,{icon:1,time:1000},function(){
+									//obj.del();
+									console.log("导出成功");
+								});
+							}else{
+								layer.msg(result.msg,{icon:2,time:1000});
 							}
-						})
-
-
-
-		                console.log(ids)
-
-		            });
+						}
+					})
 		        }
 
 		        window.refresh = function(){

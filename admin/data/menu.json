@@ -48,23 +48,6 @@
 				"type": 1,
 				"openType": "_iframe",
 				"href": "view/patient/patient-follow.html"
-			},
-
-			{
-				"id": 603,
-				"title": "患者公海",
-				"icon": "layui-icon layui-icon-subtraction",
-				"type": 1,
-				"openType": "_iframe",
-				"href": "view/patient/patient-sea.html"
-			},
-			{
-				"id": 605,
-				"title": "患者报表",
-				"icon": "layui-icon layui-icon-subtraction",
-				"type": 1,
-				"openType": "_iframe",
-				"href": "view/patient/patient-table.html"
 			}
 
 		]
@@ -82,13 +65,6 @@
 			"type": 1,
 			"openType": "_iframe",
 			"href": "view/diagnose/diagnose-management.html"
-		},{
-			"id": 101,
-			"title": "诊断报表",
-			"icon": "layui-icon layui-icon-subtraction",
-			"type": 1,
-			"openType": "_iframe",
-			"href": "view/diagnose/diagnose-table.html"
 		}
 		]
 	},

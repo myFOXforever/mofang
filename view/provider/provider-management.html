@@ -132,10 +132,11 @@
 				skin: "line",
 				toolbar: "#role-toolbar",
 				totalRow: true,
+				method:"post",
 				//数据表格携带token
-				//headers: {
-				//	token: localStorage.getItem("token")
-				//},
+				headers: {
+				token: localStorage.getItem("token")
+				},
 				response: {
 					statusName: "code", //规定数据状态的字段名称，默认：code
 					statusCode: 200, //规定成功的状态码，默认：0

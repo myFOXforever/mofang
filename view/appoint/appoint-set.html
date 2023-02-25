@@ -107,9 +107,9 @@
           totalRow: true,
           method: "post",
           //数据表格携带token
-          //headers: {
-          //	token: localStorage.getItem("token")
-          //},
+          headers: {
+          	token: localStorage.getItem("token")
+          },
           response: {
             statusName: "code", //规定数据状态的字段名称，默认：code
             statusCode: 200, //规定成功的状态码，默认：0
@@ -242,6 +242,13 @@
                   id: obj.data["id"],
                 },
                 type: "post",
+                 //携带token
+            beforeSend: function (XMLHttpRequest) {
+              XMLHttpRequest.setRequestHeader(
+                "token",
+                localStorage.getItem("token")
+              );
+            },
                 success: function (result) {
                   layer.close(loading);
                   if (result.code == 200) {
@@ -285,6 +292,13 @@
                   ids: ids,
                 },
                 type: "POST",
+                 //携带token
+            beforeSend: function (XMLHttpRequest) {
+              XMLHttpRequest.setRequestHeader(
+                "token",
+                localStorage.getItem("token")
+              );
+            },
                 success: function (result) {
                   layer.close(loading);
                   if (result.code == 0) {

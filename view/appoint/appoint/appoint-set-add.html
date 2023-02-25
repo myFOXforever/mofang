@@ -72,6 +72,13 @@ form.on('submit(role-save)', function(data) {
         data: JSON.stringify(data.field),
         //dataType: 'json',
         contentType: 'application/json',
+         //携带token
+         beforeSend: function (XMLHttpRequest) {
+            XMLHttpRequest.setRequestHeader(
+              "token",
+              localStorage.getItem("token")
+            );
+          },
         success: function (result) {
             if (result.code == 200) {
                 console.log("添加成功");
